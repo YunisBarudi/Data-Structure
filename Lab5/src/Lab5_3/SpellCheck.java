@@ -7,37 +7,53 @@ import java.io.FileNotFoundException;
 public class SpellCheck {
 
    public static void main(String[] args) {
+      String dictionaryFile = "C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\words_alpha.txt";
+      String bookFile = "C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\mussolini.txt";
+
+      //testDictionary("HashSet", new HashSet<>(), dictionaryFile, bookFile);
+      //testDictionary("LinkedHashSet", new LinkedHashSet<>(), dictionaryFile, bookFile);
+      //testDictionary("TreeSet", new TreeSet<>(), dictionaryFile, bookFile);
+      //testDictionary("LinkedList", new LinkedList<>(), dictionaryFile, bookFile);
+      testDictionary("ArrayList", new ArrayList<>(), dictionaryFile, bookFile);
+   }
+
+   private static void testDictionary(String name, Collection<String> dictionaryWords, String dictionaryFile, String bookFile) {
       try {
+         long startTime = System.nanoTime();
+         loadDictionary(dictionaryWords, dictionaryFile);
+         long loadTime = System.nanoTime() - startTime;
 
-         Set<String> dictionaryWords = new HashSet<>(readDictionary("C:\\Users\\t00243637\\IdeaProjects\\Lab5\\src\\Lab5_3\\words"));
+         Set<String> book = readWords(bookFile);
 
-         Set<String> documentWords = readWords("C:\\Users\\t00243637\\IdeaProjects\\Lab5\\src\\Lab5_3\\war-and-peace.txt");
-         Set<String> aliceWords = readWords("C:\\Users\\t00243637\\IdeaProjects\\Lab5\\src\\Lab5_3\\alice30.txt");
+         startTime = System.nanoTime();
+         List<String> misspelledWords = getMisspelledWords(book, dictionaryWords);
+         long containsTime = System.nanoTime() - startTime;
 
+         double loadTimeMs = loadTime / 1_000_000.0;
+         double containsTimeMs = containsTime / 1_000_000.0;
 
+         System.out.printf("%s: Load Time = %.2f ms, Contains Time = %.2f ms, Misspelled Words Count = %d%n",
+                 name, loadTimeMs, containsTimeMs, misspelledWords.size());
 
-         int numberMisspeltWordsDocument = 0;
-         for (String word : documentWords) {
-            if (!dictionaryWords.contains(word)) {
-               numberMisspeltWordsDocument++;
-               System.out.println(word);
-            }
-         }
-         System.out.println("Number of misspelled words in War and Peace: " + numberMisspeltWordsDocument);
-         int numberMisspelledWordsDocument2 = 0;
-         for (String word : aliceWords) {
-            if (!dictionaryWords.contains(word)) {
-               numberMisspelledWordsDocument2++;
-               System.out.println(word);
-            }
-         }
-         System.out.println("Number of misspelled words in Alice30: " + numberMisspelledWordsDocument2);
+         System.out.println("Misspelled Words: " + misspelledWords);
+
+         double percentageOfContaints = calculatePercentageOfContains(loadTimeMs, containsTimeMs);
+         System.out.println("Percentage of Contains: " + String.format("%.2f", percentageOfContaints));
+
       } catch (FileNotFoundException e) {
          System.err.println("File not found: " + e.getMessage());
       }
    }
 
-   private static Set<String> readDictionary(String filename) throws FileNotFoundException {
+   private static void loadDictionary(Collection<String> dictionaryWords, String filename) throws FileNotFoundException {
+      Scanner in = new Scanner(new File(filename));
+      in.useDelimiter("[^a-zA-Z]+");
+      while (in.hasNext()) {
+         dictionaryWords.add(in.next().toLowerCase());
+      }
+   }
+
+   private static Set<String> readWords(String filename) throws FileNotFoundException {
       Set<String> words = new HashSet<>();
       Scanner in = new Scanner(new File(filename));
       in.useDelimiter("[^a-zA-Z]+");
@@ -47,13 +63,21 @@ public class SpellCheck {
       return words;
    }
 
-   public static Set<String> readWords(String filename) throws FileNotFoundException {
-      Set<String> words = new HashSet<>();
-      Scanner in = new Scanner(new File(filename));
-      in.useDelimiter("[^a-zA-Z]+");
-      while (in.hasNext()) {
-         words.add(in.next().toLowerCase());
+   private static List<String> getMisspelledWords(Set<String> book, Collection<String> dictionaryWords) {
+      List<String> misspelled = new ArrayList<>();
+      for (String word : book) {
+         if (!dictionaryWords.contains(word)) {
+            misspelled.add(word);
+         }
       }
-      return words;
+      return misspelled;
+   }
+
+   public static double calculatePercentageOfContains(double loadTimeMs, double containsTimeMs) {
+      double totalTime = loadTimeMs + containsTimeMs;
+      if (totalTime == 0) {
+         return 0;
+      }
+      return (containsTimeMs / totalTime) * 100;
    }
 }
