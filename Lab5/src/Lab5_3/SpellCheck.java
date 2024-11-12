@@ -7,14 +7,14 @@ import java.io.FileNotFoundException;
 public class SpellCheck {
 
    public static void main(String[] args) {
-      String dictionaryFile = "C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\words_alpha.txt";
-      String bookFile = "C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\mussolini.txt";
+      String dictionaryFile = "C:\\Users\\YunisBarudi\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\words_alpha.txt";
+      String bookFile = "C:\\Users\\YunisBarudi\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\mussolini.txt";
 
-      //testDictionary("HashSet", new HashSet<>(), dictionaryFile, bookFile);
+      testDictionary("HashSet", new HashSet<>(), dictionaryFile, bookFile);
       //testDictionary("LinkedHashSet", new LinkedHashSet<>(), dictionaryFile, bookFile);
       //testDictionary("TreeSet", new TreeSet<>(), dictionaryFile, bookFile);
       //testDictionary("LinkedList", new LinkedList<>(), dictionaryFile, bookFile);
-      testDictionary("ArrayList", new ArrayList<>(), dictionaryFile, bookFile);
+      //testDictionary("ArrayList", new ArrayList<>(), dictionaryFile, bookFile);
    }
 
    private static void testDictionary(String name, Collection<String> dictionaryWords, String dictionaryFile, String bookFile) {

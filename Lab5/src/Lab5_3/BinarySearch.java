@@ -7,10 +7,10 @@ public class BinarySearch {
     public static void main(String[] args) {
         try {
 
-            List<String> dictionaryWords = new ArrayList<>(readDictionary("C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\words_alpha.txt"));
+            List<String> dictionaryWords = new ArrayList<>(readDictionary("C:\\Users\\YunisBarudi\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\words_alpha.txt"));
             Collections.sort(dictionaryWords);
 
-            Set<String> documentWords = readWords("C:\\Users\\t00243637\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\mussolini.txt");
+            Set<String> documentWords = readWords("C:\\Users\\YunisBarudi\\IdeaProjects\\Data-Structure\\Lab5\\src\\Lab5_3\\mussolini.txt");
 
             int numberMisspelledWords = 0;
             for (String word : documentWords) {
